@@ -26,6 +26,27 @@ public:
     {
         return m_len;
     }
+    char * C_str() {
+        return m_p;
+    }
+
+class Iterator {
+public:
+    Iterator( char * _ptr) {
+        ptr = _ptr;
+    }
+    bool operator != (const Iterator & it);
+    //前置加加
+    Iterator & operator ++();
+    //后置加加
+    Iterator  operator ++(int);
+    char &  operator * ();
+private:
+    char * ptr;
+};
+Iterator  begin();
+Iterator  end();
+Iterator Erase(Iterator start,Iterator end);
 
 private:
     char * m_p;

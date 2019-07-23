@@ -127,3 +127,27 @@ A & A ::transforms ()
     }
     return *this;
 }
+bool A::Iterator :: operator != (const A::Iterator & it) {
+    return !(ptr == it.ptr);
+}
+A::Iterator & A::Iterator::operator++() {
+    ptr++;
+    return *this;
+}
+A::Iterator A::Iterator::operator++(int) {
+    A::Iterator tmp = *this;
+    ptr++;
+    return tmp;
+}
+char & A::Iterator::operator*() {
+    return *ptr;
+}
+A::Iterator  A::begin() {
+    return Iterator(m_p);
+}
+A::Iterator A::end() {
+    return Iterator(m_p + strlen(m_p));
+}
+A::Iterator A::Erase(A::Iterator start,A::Iterator end) {
+    return NULL;
+}
