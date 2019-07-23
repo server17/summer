@@ -16,7 +16,7 @@ private:
 public:
     int len;
     class iterator ;
-    mystring();
+   mystring();
     mystring(const char *s);
     mystring(mystring const&s);
     ~mystring();
