@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <algorithm>
 
 using namespace std;
 class String{
@@ -42,7 +43,7 @@ class String{
         //赋值操作
         String &operator=(const String &s2);
         String &operator=(const char *str);
-        String operator+=(String &s2);
+        String &operator+=(String &s2);
         String operator+=(const char *str);
 
         friend istream& operator>>(istream &is,String &str);
@@ -138,7 +139,6 @@ class String{
                 }
                 
                 char operator*() {
-                    cout << "1" << endl;
                     return *(it->data+index);
                 }
 
@@ -164,16 +164,16 @@ class String{
                     }
                 }
 
-                iterator &operator=(iterator &its) {
+                iterator &operator=(const iterator &its) {
                     it = its.it;
                     index = its.index;
                     return *this;
                 } 
                 //迭代器相等操作
-                bool operator==(iterator &its) {
+                bool operator==(const iterator &its) {
                     return this->it == its.it && this->index == its.index;
                 }
-                bool operator!=(iterator &its) {
+                bool operator!=(const iterator &its) {
                     return !(*this == its);
                 }
                 //前置递增
@@ -501,6 +501,11 @@ String &String::operator=(const String &s2)
     return *this = s2.c_str();
 }
 
+String &String::operator+=(String &s2)
+{
+    *this = *this+s2;
+    return *this;
+}
    
 char * String::c_str() const
 {
@@ -775,11 +780,16 @@ int main()
 {
         
 
-    String s1 = "123456";
-    String s2 = "789";
-    
-    String *p = &s1;
-    cout << *p << endl;
+    String s1 = "wha";
+    String s2(5,'h');
+    s1 += s2;
+    s2 = s1;
+
+    for(auto p = s2.begin();p != s2.end();++p) 
+        cout << *p << " ";
+    cout << endl;
+    cout << s2.substr(s2.find(s2.front(),0),2) << endl;
+    cout << s1.substr(s1.find(s1.front(),0),2) << endl;
 
     return 0;
 }
