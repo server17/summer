@@ -1,0 +1,11 @@
+# 第一周总结
+#### (1)muduo网络库看到第八章，对于muduo网络库的大体框架也理解了一些
+#### (2)学习了一些C++11新特性
+- std::future 
+- std::result_of
+- 尾置返回类型
+- std::bind
+- std::forward 
+- thread,mutex,condition_variable
+#### (3)完善了mystring类以及myvector类
+#### (4)完成了一些算法题
