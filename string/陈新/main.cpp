@@ -19,12 +19,25 @@ int main()
     if(a!=b)
         cout<<"不相等"<<endl;
     else
-        cout<<"想等"<<endl;
+        cout<<"相等"<<endl;
     char  t = d[3];
     cout<<"D 的第四个元素： "<<t<<endl;
     A h("aaaaaaaaaaaaacccccccczzzzzzzzz");
     cout<<h<<"转为大写";
     h.transforms();
     cout<<h;
+    A test("edcba");
+    A ::Iterator it = NULL;
+    it = test.begin();
+    while(it != test.end()) {
+        cout<<*it<<endl;
+        ++it;
+    }
+    cout<<"test: "<<test<<endl;
+    it = test.begin();
+    it++;
+    it++;
+    test.Erase(test.begin(),it);
+    cout<<"test: "<<test<<endl;
     return 0;
 }
