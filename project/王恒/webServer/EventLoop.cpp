@@ -18,18 +18,19 @@ EventLoop::~EventLoop()
 void EventLoop::loop()
 {
     if(!isInLoopThread()) {
-        exit(0);
     }
 
     looping = true;
     quit_ = false;
     while(!quit_) {
         activeChanels.clear();
-        poll_->poll(1000,&activeChanels);
+        poll_->poll(10,&activeChanels);
         eventHanding = true;
 
         for(auto p = activeChanels.begin();p != activeChanels.end();++p) {
-            (*p)->handleEvent();
+            currentActiveChannel = *p;
+            printf("EventLoop::loop() Channel->fd:%d\n",currentActiveChannel->fd());
+            currentActiveChannel->handleEvent();
         }
 
         eventHanding = false;
@@ -107,10 +108,13 @@ int EventLoop::createEventfd() {
 }
 void EventLoop::removeChannel(Channel *channel)
 {
-    if(eventHanding)
+    if(eventHanding) {
+        printf("EventLoop::removeChannel() is eventHanding\n");
         assert(currentActiveChannel == channel || 
            std::find(std::begin(activeChanels),std::end(activeChanels),channel) == activeChanels.end());
+    }
 
+    printf("EventLoop::removeChannel()\n");
     poll_->removeChannel(channel);
 }
 

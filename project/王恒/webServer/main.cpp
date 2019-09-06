@@ -6,7 +6,6 @@
 #include <fstream>
 void signal_handle(int signal_num) {
     printf("非正常退出\n");
-    exit(0);
 }
 
 using namespace std;
@@ -56,16 +55,9 @@ void Construct(string &s,string &head) {
 }
 int main()
 {
-    TcpServer server(&loop,11111,"wh");
-    server.setConnectionCallback(onConnection1);
-    server.setMessageCallback(onMessage1);
-    server.setThreadNum(10);
-    server.start();
-
     HttpServer server2(&loop,9999,"wang");
-    server2.start();
     
-
+    server2.start();
     loop.loop();
     return 0;
 }

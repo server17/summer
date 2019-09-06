@@ -17,14 +17,17 @@ TcpServer::TcpServer(EventLoop *loop,int port,std::string namearg)
 
 void TcpServer::NewConnection(int sockfd,struct sockaddr_in addr)
 {
+    
+    printf("TcpServer::NewConnection() fd:%d\n",sockfd);
     char buf[64];
     //为新创建的TcpConnection对象起名
-    snprintf(buf,sizeof buf,"-%s#%d",inet_ntoa(addr.sin_addr),nextConnId);
+    snprintf(buf,sizeof buf,"-%s#:%d",inet_ntoa(addr.sin_addr),nextConnId);
     ++nextConnId;
     std::string connName = buf+name;
 
     EventLoop *ioLoop = threadpool->getNextLoop();
     /* EventLoop *ioLoop = loop; */
+    
     TcpConnectionPtr conn(new TcpConnection(ioLoop,connName,sockfd));
     connections[connName] = conn;
     conn->setConnectionCallback(connectionCallback);

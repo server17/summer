@@ -5,12 +5,14 @@ EventLoopThreadPool::EventLoopThreadPool(EventLoop *baseLoop)
     start_(false),
     numThreads_(0),
     loops(1),
-    next_(0)
+    next_(0),
+    distributions(0)
 {
 }
 void EventLoopThreadPool::run(EventLoopThreadPool *t,int i) {
     std::unique_lock<std::mutex> lock(t->Mutex);
     t->Cond.wait(lock);
+    t->distributions--;
     EventLoop *loop = new EventLoop();; 
     t->loops[i-1] = loop;
     t->next_ = i-1;
@@ -20,6 +22,7 @@ void EventLoopThreadPool::run(EventLoopThreadPool *t,int i) {
 void EventLoopThreadPool::setThreadNum(int numThreads)
 {
     numThreads_ = numThreads;
+    distributions = numThreads;
     loops.resize(numThreads_+1);
 }
 
@@ -38,7 +41,7 @@ void EventLoopThreadPool::start()
 EventLoop *EventLoopThreadPool::getNextLoop() {
 
     std::unique_lock<std::mutex> lock(Mutex);
-    if(numThreads_ >= 1) {
+    if(numThreads_ >= 1 && distributions) {
         Cond.notify_one();
     }
     lock.unlock();
@@ -46,12 +49,14 @@ EventLoop *EventLoopThreadPool::getNextLoop() {
     lock.lock();
 
     int i;
-
     if(numThreads_ == 0) {
         i = 0;
     }
     else {
-        i = next_%numThreads_;
+        if(distributions)
+            i = next_%numThreads_;
+        else 
+            i = ++next_%numThreads_;
     }
 
     lock.unlock();

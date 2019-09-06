@@ -34,7 +34,6 @@ void Acceptor::handleRead()
             newConnectionCallback_(connfd,sockaddr);
         }
         else {
-            ::close(connfd);
         }
     }
     else {

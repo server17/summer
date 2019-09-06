@@ -4,6 +4,12 @@ Socket::Socket()
     sockfd = socket(AF_INET,SOCK_STREAM,0);    
 }
 
+Socket::Socket(int fd)
+{
+    sockfd = fd;
+}
+
+
 void Socket::bindAddress(struct sockaddr_in addr)
 {
     int flag = 1;
@@ -34,20 +40,17 @@ int Socket::acceptAddr(struct sockaddr_in *addr)
     socklen_t len = sizeof addr;
     bzero(&addr,sizeof addr);        
     int connfd = ::accept(sockfd,(sockaddr *)addr,&len);
-    if(connfd >= 0)
+
+    if(connfd > 0)
         return connfd;
     return -1;
 }
 
 Socket::~Socket()
 {
-    close(sockfd);
+    shutdown();
 }
 
-Socket::Socket(int fd)
-{
-    sockfd = fd;
-}
 //获取本地网卡接口地址;
 struct sockaddr_in Socket::GetLocalAddr()
 {
@@ -64,4 +67,3 @@ void Socket::shutdown()
 {
     ::shutdown(sockfd,SHUT_WR);
 }
-
